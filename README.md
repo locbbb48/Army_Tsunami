@@ -1,2 +1,3 @@
 # Army_Tsunami
-This is the Script file for the Army Tsunami project
+A game project inspired by Zombie Tsunami, made with Unity;
+Includes only Script files for the Army Tsunami project.
