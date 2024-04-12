@@ -22,4 +22,20 @@ public class CloudVsThunderArea : MonoBehaviour
         // Cập nhật vị trí của đối tượng
         transform.position = startPosition + new Vector2(movementX, movementY);
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        { 
+            AudioManager.instance.PlaySfxAudio(AudioManager.instance.Clouds);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.gameObject.CompareTag("Player"))
+        { 
+            AudioManager.instance.PauseSfxAudio(AudioManager.instance.Clouds);
+        }
+    }
 }

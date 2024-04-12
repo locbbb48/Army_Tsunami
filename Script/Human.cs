@@ -5,19 +5,23 @@ using UnityEngine;
 
 public class Human : MonoBehaviour
 {
-    public GameObject playerPrefab;
+    [SerializeField] private GameObject playerPrefab;
     private GameManager gameManager;
 
-    [SerializeField] float speed = 1f;
-    private bool isFacingRight = false;
-    [SerializeField] float x1, x2;
-    private bool isDestroyed = false;
+    [SerializeField] private float speed = 1f;
+    [SerializeField] private bool isFacingRight;
+    [SerializeField] private float x1, x2;
+    [SerializeField] private float radius = 5f;
+    [SerializeField] private bool isDestroyed = false;
+
+    private Vector3 originalScale;
 
     void Start()
     {
+        originalScale = transform.localScale;
         gameManager = FindObjectOfType<GameManager>();
-        x1 = transform.position.x - 5;
-        x2 = transform.position.x + 5;
+        x1 = transform.position.x - radius;
+        x2 = transform.position.x + radius;
 
     }
     private void Update()
@@ -33,13 +37,16 @@ public class Human : MonoBehaviour
 
         if (transform.position.x >= x2) 
         {
-            isFacingRight = false;
-            transform.localScale = new Vector3(1, 1, 1); // quay mặt sang trái
+            isFacingRight = !isFacingRight;
+            originalScale.x = -originalScale.x;
+            transform.localScale = new Vector3(originalScale.x, originalScale.y, originalScale.z); // quay mặt sang trái
         }
         else if (transform.position.x <= x1)
         {
-            isFacingRight = true;
-            transform.localScale = new Vector3(-1, 1, 1); // quay mặt sang phải
+            isFacingRight = !isFacingRight; ;
+            originalScale.x = -originalScale.x;
+
+            transform.localScale = new Vector3(originalScale.x, originalScale.y, originalScale.z); // quay mặt sang phải
 
         }
     }
@@ -53,7 +60,9 @@ public class Human : MonoBehaviour
             AudioManager.instance.PlaySfxAudio1shot(AudioManager.instance.HumanDestroy);
 
             // Tạo một player mới
-            gameManager.CreateNewPlayer(playerPrefab, this.transform);
+            Vector3 newPos = transform.position;
+            newPos.x = gameManager.m_characs[0].transform.position.x - gameManager.charCount / 2;
+            gameManager.CreateNewPlayer(playerPrefab, newPos);
         }
     }
 }

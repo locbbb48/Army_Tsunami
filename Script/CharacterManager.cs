@@ -1,75 +1,95 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class CharacterManager : MainChar
 {
-    [SerializeField] Rigidbody2D rb;
-    [SerializeField] float speed;
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private float speed;
 
+    GameManager gameManager;
 
     private void Awake()
     {
+        gameManager = FindObjectOfType<GameManager>();
         rb = GetComponent<Rigidbody2D>();
         speed = Random.Range(-0.2f, 0.2f);
+        Index = GetIndexInList();
     }
     private void Update()
     {
+        if (gameManager.m_characs[0] == null)
+        {
+            gameManager.m_characs[0] = gameManager.m_characs[1];
+        }
+        Index = GetIndexInList();
+        Move(Index);
+        if(Index > 0)
+        {
+            fixedPosition();
+        }
         transform.Translate(Vector2.right * (Mainspeed + speed) * Time.deltaTime);
-        Move();
     }
 
-    public void Move()
+    private void Move(int Index)
+    {
+        if (Index == 0)
+        {
+            Mainspeed = 3.2f;
+            firstCharMove();
+        }
+        else if (Index > 0)
+        {
+            followFirstChar();
+        }
+    }
+
+    private void fixedPosition()
+    {
+        if (transform.position.x > gameManager.m_characs[0].transform.position.x - Index / 2 || speed > 0.21f)
+        {
+            isAcceleration = false;
+            speed -= Acceleration * Time.deltaTime;
+        }
+        else
+        {
+            isAcceleration = true;
+            speed += Acceleration * Time.deltaTime;
+        }
+    }
+
+    public int GetIndexInList()
+    {
+        // Kiểm tra xem nhân vật này có trong danh sách không
+        if (gameManager.m_characs.Contains(this))
+        {
+            // Trả về chỉ mục của nhân vật trong danh sách
+            return gameManager.m_characs.IndexOf(this);
+        }
+        else
+        {
+            // Trả về -1 nếu nhân vật không có trong danh sách
+            return -1;
+        }
+    }
+
+    private void firstCharMove()
     {
         // Nhảy
         if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && isGrounded )
         {
-            if (isJumpable)
-            {
-                isJumping = true;
-                jumpTime = maxJumpTime;
-                rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
-            }
-            else
-            {
-                StartCoroutine(JumpAfterDelay(0.3f));
-            }
+            rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
         }
+    }
 
-
-        if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.Space)) && !isGrounded && isJumping)
+    private void followFirstChar()
+    {
+        if((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && isGrounded )
         {
-            if (jumpTime > 0)
-            {
-                rb.velocity = Vector2.up * jumpForce;
-                jumpTime -= Time.deltaTime;
-            }
-            else
-            {
-                isJumping = false;
-            }
+            float DelayTime = unitTimetoJump * Index;
+            StartCoroutine(JumpDelay(DelayTime));
         }
-        if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.Space))
-        {
-            isJumping = false;
-        }
-
-        // Tang Giảm Mainspeed
-        if (isAccelerating)
-        {
-            speed += acceleration * Time.deltaTime;
-            if(Mainspeed + speed > 3)
-            {
-                speed = Random.Range(0f, 0.2f);
-                acceleration = 0;
-            }
-        }
-        else
-        {
-            acceleration = 0.15f;
-            speed -= acceleration * Time.deltaTime;
-        }
-
     }
 
     // Player chỉ được nhảy khi đã chạm đất
@@ -79,20 +99,6 @@ public class CharacterManager : MainChar
         {
             isGrounded = true; // Nhân vật đang chạm đất
         }
-
-        if (collision.gameObject.name == "LimitX1")
-        {
-            isAccelerating = true;
-        }
-        else if (collision.gameObject.name == "LimitX2")
-        {
-            isAccelerating = false;
-        }
-
-        if (collision.gameObject.name == "JumpablePos")
-        {
-            isJumpable = true;
-        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -101,18 +107,12 @@ public class CharacterManager : MainChar
         {
             isGrounded = false; // Nhân vật đang không chạm đất
         }
-
-        if (collision.gameObject.name == "JumpablePos")
-        {
-            isJumpable = false;
-        }
     }
 
-    IEnumerator JumpAfterDelay(float delay)
+    IEnumerator JumpDelay(float delay)
     {
         isGrounded = false;
         yield return new WaitForSeconds(delay);
-        rb.AddForce(new Vector2(0, jumpForce * 1.5f), ForceMode2D.Impulse);
-        
+        rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
     }
 }

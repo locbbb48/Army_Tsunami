@@ -6,8 +6,8 @@ public class Tesla : MonoBehaviour
 {
     private GameManager gameManager;
 
-    public Animator animator;
-    public bool iscoll = false;
+    [SerializeField] private Animator animator;
+    [SerializeField] private bool iscoll = false;
 
     private void Start()
     {

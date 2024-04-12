@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class CampFire : MonoBehaviour
 {
-    public Animator Anim;
-    public GameObject FireBall;
+    [SerializeField] private Animator Anim;
+    [SerializeField] private GameObject FireBall;
 
     private void Start()
     {

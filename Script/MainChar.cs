@@ -4,22 +4,18 @@ using UnityEngine;
 
 public class MainChar : MonoBehaviour
 {
-    public float Mainspeed = 3f;
-    public bool isGrounded = false; // Biến kiểm tra nhân vật có đang chạm đất
-    public float jumpForce = 5.5f;
-    public float maxJumpTime = 0.27f;
-    public float jumpTime;
-    public bool isJumping = false;
-    public bool isJumpable = false;
+    [SerializeField] protected float Mainspeed = 3f;
+    [SerializeField] protected bool isGrounded = false; // Biến kiểm tra nhân vật có đang chạm đất
+    [SerializeField] protected float jumpForce = 8f;
+    [SerializeField] protected float unitTimetoJump = 0.2f;
 
-    public float acceleration = 0.1f;
-    public bool isAccelerating = true;
+    [SerializeField] protected int Index;
 
-    public float LimitX;
+    [SerializeField] protected bool isAcceleration = true;
+    [SerializeField] protected float Acceleration = 0.2f;
 
     void Update()
     {
         transform.Translate(Vector2.right * Mainspeed * Time.deltaTime);
-        LimitX = transform.position.x;
     }
 }
