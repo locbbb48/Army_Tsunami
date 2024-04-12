@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class FireBall : MonoBehaviour
 {
-    public Animator Anim;
-    public bool iscoll = false;
-    public float speed = 1f;
+    [SerializeField] private Animator Anim;
+    [SerializeField] private bool isColl = false;
+    [SerializeField] private float speed = 1f;
 
-    GameManager gameManager;
+    private GameManager gameManager;
 
-    private void Awake()
+    private void Start()
     {
         gameManager= FindObjectOfType<GameManager>();
         AudioManager.instance.PlaySfxAudio1shot(AudioManager.instance.FireBall);
@@ -22,9 +22,9 @@ public class FireBall : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Tile"))
+        if((collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Tile")) && !isColl)
         {
-            iscoll = true;
+            isColl = true;
             Anim.SetTrigger("isColl");
             gameManager.DestroyAnPlayer(collision.gameObject);
             Destroy(gameObject);

@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         charCount = m_characs.Count;
+
         if (charCount == 0)
         {
             GameOver();
@@ -80,9 +81,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void CreateNewPlayer(GameObject PlayerNeedCreate, Transform trans)
+    public void CreateNewPlayer(GameObject PlayerNeedCreate, Vector3 Pos)
     {
-        GameObject newPlayer = Instantiate(PlayerNeedCreate, trans.position, Quaternion.identity);
+        GameObject newPlayer = Instantiate(PlayerNeedCreate, Pos, Quaternion.identity);
 
         // Thêm player mới vào danh sách trong GameManager
         m_characs.Add(newPlayer.GetComponent<CharacterManager>());
