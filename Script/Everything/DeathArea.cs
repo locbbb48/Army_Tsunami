@@ -17,5 +17,9 @@ public class DeathArea : MonoBehaviour
         {
             gameManager.DestroyAnPlayer(collision.gameObject);
         }
+        else if (collision.gameObject.tag == "bigPlayer")
+        {
+            gameManager.GameOver();
+        }
     }
 }

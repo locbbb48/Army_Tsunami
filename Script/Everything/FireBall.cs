@@ -12,6 +12,7 @@ public class FireBall : MonoBehaviour
 
     private void Start()
     {
+        Anim = GetComponent<Animator>();
         gameManager= FindObjectOfType<GameManager>();
         AudioManager.instance.PlaySfxAudio1shot(AudioManager.instance.FireBall);
     }
@@ -27,6 +28,12 @@ public class FireBall : MonoBehaviour
             isColl = true;
             Anim.SetTrigger("isColl");
             gameManager.DestroyAnPlayer(collision.gameObject);
+            Destroy(gameObject);
+        }
+        else if ((collision.gameObject.CompareTag("bigPlayer") && !isColl))
+        {
+            isColl = true;
+            Anim.SetTrigger("isColl");
             Destroy(gameObject);
         }
     }

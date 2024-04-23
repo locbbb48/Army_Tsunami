@@ -12,6 +12,7 @@ public class Tesla : MonoBehaviour
     private void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+        animator = GetComponent<Animator>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -23,6 +24,12 @@ public class Tesla : MonoBehaviour
             AudioManager.instance.PlaySfxAudio1shot(AudioManager.instance.Tesla);
             gameManager.DestroyAnPlayer(collision.gameObject);
             Destroy(gameObject, 1f);
+        }
+        else if (collision.gameObject.CompareTag("bigPlayer"))
+        {
+            iscoll = true;
+            animator.SetTrigger("SetTrigger");
+            AudioManager.instance.PlaySfxAudio1shot(AudioManager.instance.Tesla);
         }
     }
 }

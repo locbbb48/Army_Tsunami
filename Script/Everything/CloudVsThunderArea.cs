@@ -25,7 +25,7 @@ public class CloudVsThunderArea : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("bigPlayer"))
         { 
             AudioManager.instance.PlaySfxAudio(AudioManager.instance.Clouds);
         }
@@ -33,7 +33,7 @@ public class CloudVsThunderArea : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if(collision.gameObject.CompareTag("Player"))
+        if(collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("bigPlayer"))
         { 
             AudioManager.instance.PauseSfxAudio(AudioManager.instance.Clouds);
         }

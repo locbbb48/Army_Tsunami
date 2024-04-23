@@ -47,7 +47,10 @@ public class AudioManager : MonoBehaviour
 
     public void PauseSfxAudio(AudioClip SfxClip)
     {
-        VfxAudioSource.clip = SfxClip;
-        VfxAudioSource.Pause();
+        if (SfxClip != null)
+        {
+            VfxAudioSource.clip = SfxClip;
+            VfxAudioSource.Pause();
+        }
     }
 }
