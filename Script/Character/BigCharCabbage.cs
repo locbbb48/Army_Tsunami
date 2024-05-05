@@ -2,57 +2,39 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BigCharCabbage : MainChar
+public class BigCharCabbage : BigChar
 {
-    [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private Animator Anim;
+    [SerializeField] protected Animator Anim;
+    [SerializeField] private bool isGrounded  = false;
 
-    [SerializeField] private float existTime = 10f; // tgian tồn tại
-    [SerializeField] protected Transform AllCharacters;
-
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         Anim = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>();
     }
 
-    GameManager gameManager;
-
-    private void Start()
+    protected override void Start()
     {
-        gameManager = FindObjectOfType<GameManager>();
-        AllCharacters = GameObject.Find("AllCharacter").transform;
-        Mainspeed = 3.6f;
+        base.Start();
     }
 
-    private void Update()
+    protected new void Update()
     {
-        // move
-        transform.Translate(Vector2.right * Mainspeed * Time.deltaTime);
+        base.Update();
+        Move();
+    }
+
+    protected override void Move()
+    {
+        base.Move();
         if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && isGrounded)
         {
             rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
-        }
-        
-        // ẩn các Char
-        foreach (Transform child in AllCharacters.transform)
-        {
-            child.gameObject.SetActive(false);
-        }
-        existTime -= Time.deltaTime;
-        if( existTime <= 0 ) // hết tgian biến hình
-        {
-            Vector3 bigCharPosition = transform.position;
-            foreach (Transform child in AllCharacters.transform)
-            {
-                child.position = bigCharPosition; // child xuất hiện tại vị trí của bigChar
-                child.gameObject.SetActive(true);
-            }
-            Destroy(gameObject);
+            isGrounded = false;
         }
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Tile")
         {

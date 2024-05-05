@@ -16,15 +16,22 @@ public class AudioManager : MonoBehaviour
 
     public AudioClip CreateAnPlayer;
     public AudioClip DestroyAnPlayer;
+    public AudioClip Police;
+    public AudioClip Warning;
 
     public AudioClip HumanMove;
     public AudioClip HumanDestroy;
 
     public AudioClip Campfire;
     public AudioClip FireBall;
+    public AudioClip Dart;
 
     public AudioClip Clouds;
     public AudioClip Tesla;
+
+    public AudioClip Transfiguation;
+    public AudioClip Swish;
+    public AudioClip Transport;
 
     private void Awake()
     {

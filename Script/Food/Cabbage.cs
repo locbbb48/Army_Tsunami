@@ -21,16 +21,23 @@ public class Cabbage : FoodAbstract
             {
                 child.gameObject.SetActive(false);
             }
-            Destroy(gameObject, 0.1f);
-            AudioManager.instance.PlaySfxAudio1shot(AudioManager.instance.HumanDestroy);
+            AudioManager.instance.PlaySfxAudio1shot(AudioManager.instance.Transfiguation);
             // Tạo một player mới
-            StartCoroutine(CreateNewPlayerAfterDelay(0.09f));
+            gameManager.CreateBigPlayer(bigPlayerPrefab);
+            Destroy(gameObject, 0.1f);
         }
+        else if(collision.gameObject.CompareTag("bigPlayer") && !isColl) 
+        {
+            isColl = true;
+            foreach (Transform child in AllCharacters.transform)
+            {
+                child.gameObject.SetActive(false);
+            }
+            AudioManager.instance.PlaySfxAudio1shot(AudioManager.instance.Transfiguation);
+            gameManager.CreateBigPlayer(bigPlayerPrefab, transform.position);
+            Destroy(collision.gameObject);
+            Destroy(gameObject, 0.1f);
+        } 
     }
-
-    protected IEnumerator CreateNewPlayerAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        gameManager.CreateBigPlayer(bigPlayerPrefab);
-    }
+ 
 }

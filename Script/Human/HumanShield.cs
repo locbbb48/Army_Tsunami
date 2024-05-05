@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class HumanShield : Human
 {
-    [SerializeField] private Animator Anim;
-    [SerializeField] private int AttackCountNeedtoDestroy = 7;
-    private new void Start()
+    [SerializeField] protected Animator Anim;
+    [SerializeField] protected int AttackCountNeedtoDestroy = 7;
+    protected new void Start()
     {
         base.Start();
         Anim = GetComponent<Animator>();
     }
-    new private void Update()
+    new protected void Update()
     {
         base.Update();
     }
-    private new void OnCollisionEnter2D(Collision2D collision)
+    protected new void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player") && !isDestroyed)
         {
@@ -31,19 +31,17 @@ public class HumanShield : Human
             if (gameManager.attackCount >= AttackCountNeedtoDestroy)
             {
                 isDestroyed = true;
-                Destroy(gameObject, 0.1f);
+                gameManager.CreateNewPlayer(playerPrefab);
                 AudioManager.instance.PlaySfxAudio1shot(AudioManager.instance.HumanDestroy);
-                // Tạo một player mới
-                StartCoroutine(CreateNewPlayerAfterDelay(0.09f));
+                Destroy(gameObject, 0.1f);
             }
         }
         else if(collision.gameObject.CompareTag("bigPlayer"))
         {
             isDestroyed = true;
-            Destroy(gameObject, 0.1f);
+            gameManager.CreateNewPlayer(playerPrefab);
             AudioManager.instance.PlaySfxAudio1shot(AudioManager.instance.HumanDestroy);
-            // Tạo một player mới
-            StartCoroutine(CreateNewPlayerAfterDelay(0.09f));
+            Destroy(gameObject, 0.1f);
         }
     }
 }
