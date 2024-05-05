@@ -5,6 +5,4 @@
 
 A game project inspired by Zombie Tsunami, made with Unity;
 Includes only Script files for the Army Tsunami project.
-![Screenshot 2024-04-22 164140](https://github.com/locbbb48/Army_Tsunami/assets/139316884/7afa3981-d55d-4d35-8c8e-6f0c34141ba8)
-![Screenshot 2024-04-22 164206](https://github.com/locbbb48/Army_Tsunami/assets/139316884/8035e7b1-8d32-491f-a516-c734a05e3611)
-![Screenshot 2024-04-22 164250](https://github.com/locbbb48/Army_Tsunami/assets/139316884/46af0de0-2e77-4b42-9a7b-b9e7a568a08a)
+Preview and download : https://drive.google.com/drive/folders/1xAOa5zK42mBioypLAHO5XTlz7kJNDDNB?usp=drive_link
