@@ -32,6 +32,12 @@ public class CharacterManager : MainChar
             Debug.Log("error in Character.cs: gameManager is nullReference in Start()");
         }
     }
+
+    private void OnEnable()
+    {
+        isJumping = false;
+    }
+
     private void Update()
     {
         if (gameManager.m_characs.Count > 0 && gameManager.m_characs[0] != null && this != null)
@@ -103,6 +109,7 @@ public class CharacterManager : MainChar
         }
         else if (Index > 0)
         {
+            Mainspeed = 3.0f;
             fixedPosition();
             followFirstChar();
         }
@@ -121,9 +128,9 @@ public class CharacterManager : MainChar
 
     private void followFirstChar() // Index>0
     {
-        if((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && isGrounded)
+        if(thisTurnNeedJump < gameManager.thisTurnNeedJumpForAll && isGrounded && !isJumping)
         {
-            speed += 0.2f;
+            speed += 0.05f;
             float DelayTime = unitTimetoJump * Index;
             StartCoroutine(JumpDelay(DelayTime));
         }
@@ -131,9 +138,14 @@ public class CharacterManager : MainChar
     IEnumerator JumpDelay(float delay)
     {
         isGrounded = false;
+        isJumping = true;
         thisTurnNeedJump++;
         yield return new WaitForSeconds(delay);
-        rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+        if (this != null)
+        {
+            isJumping = false;
+            rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+        }
     }
 
 
@@ -143,11 +155,6 @@ public class CharacterManager : MainChar
         if (collision.gameObject.tag == "Tile")
         {
             isGrounded = true;
-            if (Index > 0 && thisTurnNeedJump < gameManager.thisTurnNeedJumpForAll)
-            {
-                rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
-                thisTurnNeedJump++;
-            }
         }
         if (collision.gameObject.CompareTag("Food"))
         {
@@ -172,7 +179,7 @@ public class CharacterManager : MainChar
         }
         if(collision.gameObject == gameManager.BoxCol2)
         {
-            speed = 1f;
+            speed = 2f;
         }
     }
 }

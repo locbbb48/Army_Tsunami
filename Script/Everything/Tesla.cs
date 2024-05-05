@@ -30,6 +30,7 @@ public class Tesla : MonoBehaviour
             iscoll = true;
             animator.SetTrigger("SetTrigger");
             AudioManager.instance.PlaySfxAudio1shot(AudioManager.instance.Tesla);
+            Destroy(gameObject, 1f);
         }
     }
 }

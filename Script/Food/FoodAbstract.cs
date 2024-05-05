@@ -10,5 +10,6 @@ public abstract class FoodAbstract : MonoBehaviour
     protected void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+        AllCharacters = GameObject.Find("AllCharacter").transform;
     }
 }

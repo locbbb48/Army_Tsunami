@@ -10,6 +10,8 @@ public class Archer : humanAbstract
     [SerializeField] private bool isFire = true;
     [SerializeField] private int ArrowCount = 2;
     [SerializeField] private float timeDelay = 1f;
+    [SerializeField] private int controlArrowParameter  = 1; // thông số điều chỉnh hướng và tốc độ cho arrow( =0 : đi thẳng; =1 : đi chéo )
+
 
     private new void Start()
     {
@@ -19,13 +21,16 @@ public class Archer : humanAbstract
 
     private void Update()
     {
-        if (gameManager.m_characs.Count >0 && gameManager.m_characs[0] != null)
+        if (gameManager.m_characs.Count > 0 && gameManager.m_characs[0] != null)
         {
-            if (gameManager.m_characs[0].transform.position.x > FirePoint.position.x && isFire)
+            GameObject bigPlayer = GameObject.FindGameObjectWithTag("bigPlayer");
+            if ((gameManager.m_characs[0].transform.position.x > FirePoint.position.x 
+                    || (bigPlayer != null && bigPlayer.transform.position.x > FirePoint.position.x))
+                        && isFire)
             {
                 for (int i = 1; i <= ArrowCount && isFire; i++)
                 {
-                    StartCoroutine(Delay(timeDelay * i, i));
+                    StartCoroutine(Delay(timeDelay * i, i * controlArrowParameter));
                 }
                 isFire = false;
 
@@ -38,7 +43,6 @@ public class Archer : humanAbstract
         Anim.SetTrigger("isFire");
         GameObject arrowObject = Instantiate(ArrowPrefab, transform.position, ArrowPrefab.transform.rotation);
         Arrow arrow = arrowObject.GetComponent<Arrow>();
-        Debug.Log("ban tum lum");
         arrow.direction = new Vector3(-2, -directionY, 0);
     }
     IEnumerator Delay(float delay, int directionY)

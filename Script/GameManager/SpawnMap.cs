@@ -1,7 +1,9 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Note: Vị trí của SpawnMap và CreateNewMapPoint phải trùng nhau và giống nhau giữa tất cả các Map.
+// Các map có cùng length là 320
 public class SpawnMap : MonoBehaviour
 {
     public GameObject m_CreateNewMapPoint;

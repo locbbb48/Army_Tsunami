@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class humanAbstract : MonoBehaviour
 {
 
-    [SerializeField] protected GameObject playerPrefab;
+    protected GameObject playerPrefab;
     protected GameManager gameManager;
 
     [SerializeField] protected float speed = 1f;
@@ -14,22 +14,17 @@ public abstract class humanAbstract : MonoBehaviour
     protected virtual void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+        playerPrefab = gameManager.charTypes[Random.Range(0, gameManager.charTypes.Count)];
     }
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
         if ((collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("bigPlayer")) && !isDestroyed)
         {
             isDestroyed = true;
-            Destroy(gameObject, 0.1f);
             AudioManager.instance.PlaySfxAudio1shot(AudioManager.instance.HumanDestroy);
             // Tạo một player mới
-            StartCoroutine(CreateNewPlayerAfterDelay(0.09f));
+            gameManager.CreateNewPlayer(playerPrefab);
+            Destroy(gameObject, 0.1f);
         }
     }
-    protected IEnumerator CreateNewPlayerAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        gameManager.CreateNewPlayer(playerPrefab);
-    }
-
 }
